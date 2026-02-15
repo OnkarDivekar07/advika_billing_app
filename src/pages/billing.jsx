@@ -15,7 +15,6 @@ function Billing() {
     monthlySales: 0,
   });
 
-  const [customerCount, setCustomerCount] = useState(0);
   const [products, setProducts] = useState([]);
 
   // ================= CALCULATE TOTAL =================
@@ -30,9 +29,6 @@ function Billing() {
       setMetrics(res.data);
     });
 
-    API.get("/customers/count").then((res) => {
-      setCustomerCount(res.data.count);
-    });
 
     API.get("/products/getproduct").then((res) => {
       setProducts(res.data);
