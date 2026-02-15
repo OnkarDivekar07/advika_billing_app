@@ -68,10 +68,6 @@ function Billing() {
     setItems([{ item_name: "", quantity: 1, price: 0, total: 0 }]);
   };
 
-  const updateCustomer = async (change) => {
-    const res = await API.post("/customers/update", { change });
-    setCustomerCount(res.data.count);
-  };
 
   const sendStockEmail = async () => {
     await API.post("/sendemail/email");
