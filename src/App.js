@@ -1,24 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import Billing from "./pages/billing";
+import Login from "./pages/LoginSignup";
+import OtpVerificationPage from "./pages/OtpVerificationPage";
+import DailyTransactions from "./pages/DailyTransactions";
+import Inventory from "./pages/Inventory";
+import Financials from "./pages/Financials";
+
+import Layout from "./components/Layout";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+
+      {/* Public Routes */}
+      <Route path="/" element={<Login />} />
+      <Route path="/verify-otp" element={<OtpVerificationPage />} />
+
+      {/* Dashboard Routes with Sidebar */}
+      <Route
+        path="/billing"
+        element={
+          <Layout>
+            <Billing />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/daily"
+        element={
+          <Layout>
+            <DailyTransactions />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/inventory"
+        element={
+          <Layout>
+            <Inventory />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/financials"
+        element={
+          <Layout>
+            <Financials />
+          </Layout>
+        }
+      />
+
+      {/* Redirect unknown routes */}
+      <Route path="*" element={<Navigate to="/" />} />
+
+    </Routes>
   );
 }
 
