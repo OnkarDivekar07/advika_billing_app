@@ -6,8 +6,10 @@ function Billing() {
   const [items, setItems] = useState([
     { item_name: "", quantity: 1, price: 0, total: 0 },
   ]);
+
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [totalAmount, setTotalAmount] = useState(0);
+
   const [metrics, setMetrics] = useState({
     dailyProfit: 0,
     dailySales: 0,
@@ -47,7 +49,10 @@ function Billing() {
   };
 
   const addItem = () => {
-    setItems([...items, { item_name: "", quantity: 1, price: 0, total: 0 }]);
+    setItems([
+      ...items,
+      { item_name: "", quantity: 1, price: 0, total: 0 },
+    ]);
   };
 
   const removeItem = (index) => {
@@ -57,10 +62,11 @@ function Billing() {
   const submitBilling = async () => {
     await API.post("/transactions/billingTranction", [
       ...items,
-      { total_amount: totalAmount },
+      { total_amount: totalAmount, payment_method: paymentMethod },
     ]);
     alert("Transaction submitted!");
     setItems([{ item_name: "", quantity: 1, price: 0, total: 0 }]);
+    setPaymentMethod("cash");
   };
 
   const sendStockEmail = async () => {
@@ -154,61 +160,89 @@ function Billing() {
       <div className="mobile-only">
         {items.map((item, index) => (
           <div key={index} className="mobile-card">
+            {items.length > 1 && (
+              <button
+                className="mobile-remove"
+                onClick={() => removeItem(index)}
+                aria-label="Remove item"
+              >
+                ❌
+              </button>
+            )}
+
             <label>Item Name</label>
             <input
               list="productList"
               value={item.item_name}
-              onChange={(e) => handleChange(index, "item_name", e.target.value)}
+              onChange={(e) =>
+                handleChange(index, "item_name", e.target.value)
+              }
             />
 
             <label>Quantity</label>
             <input
               type="number"
               value={item.quantity}
-              onChange={(e) => handleChange(index, "quantity", +e.target.value)}
+              onChange={(e) =>
+                handleChange(index, "quantity", +e.target.value)
+              }
             />
 
             <label>Price</label>
             <input
               type="number"
               value={item.price}
-              onChange={(e) => handleChange(index, "price", +e.target.value)}
+              onChange={(e) =>
+                handleChange(index, "price", +e.target.value)
+              }
             />
 
-            <div className="mobile-total">Total: ${item.total.toFixed(2)}</div>
+            <div className="mobile-total">
+              Total: ${item.total.toFixed(2)}
+            </div>
             <hr />
           </div>
         ))}
-        <div className="mobile-only">
-          <div style={{ marginTop: "20px" }}>
-          <button className="primary-btn" onClick={addItem}>
-            + Add Item
-          </button>
-        </div>
-        </div>
-        <div className="payment-radio">
-  <label className={`radio-btn ${paymentMethod === "cash" ? "active" : ""}`}>
-    <input
-      type="radio"
-      name="payment"
-      value="cash"
-      checked={paymentMethod === "cash"}
-      onChange={() => setPaymentMethod("cash")}
-    />
-    💵 Cash
-  </label>
 
-  <label className={`radio-btn ${paymentMethod === "online" ? "active" : ""}`}>
-    <input
-      type="radio"
-      name="payment"
-      value="online"
-      checked={paymentMethod === "online"}
-      onChange={() => setPaymentMethod("online")}
-    />
-    💳 Online
-  </label>
-</div>
+        <button
+          className="primary-btn"
+          onClick={addItem}
+          style={{ width: "100%", marginTop: "10px" }}
+        >
+          + Add Item
+        </button>
+
+        {/* ================= PAYMENT METHOD ================= */}
+        <div className="payment-radio">
+          <label
+            className={`radio-btn ${
+              paymentMethod === "cash" ? "active" : ""
+            }`}
+          >
+            <input
+              type="radio"
+              name="payment"
+              checked={paymentMethod === "cash"}
+              onChange={() => setPaymentMethod("cash")}
+            />
+            💵 Cash
+          </label>
+
+          <label
+            className={`radio-btn ${
+              paymentMethod === "online" ? "active" : ""
+            }`}
+          >
+            <input
+              type="radio"
+              name="payment"
+              checked={paymentMethod === "online"}
+              onChange={() => setPaymentMethod("online")}
+            />
+            💳 Online
+          </label>
+        </div>
+
         <button
           className="success-btn"
           onClick={submitBilling}
@@ -235,6 +269,7 @@ function Billing() {
           </button>
         </div>
       </div>
+
       {/* ================= PRODUCT LIST ================= */}
       <datalist id="productList">
         {products.map((p, i) => (
