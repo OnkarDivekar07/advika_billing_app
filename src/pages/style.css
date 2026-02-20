@@ -251,3 +251,39 @@ input:focus {
         width: 100%;
     }
 }
+
+/* Hide monthly metrics on mobile */
+@media (max-width: 768px) {
+  .stat-card:nth-child(3),
+  .stat-card:nth-child(4) {
+    display: none;
+  }
+}
+
+
+.payment-radio {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.radio-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  background: #f9f9f9;
+}
+
+.radio-btn input {
+  display: none;
+}
+
+.radio-btn.active {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
+}

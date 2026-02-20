@@ -23,10 +23,7 @@ function OtpVerificationPage() {
 
     setLoading(true); // Start loading state
     try {
-      // API call to verify OTP
-      console.log("Before API call");
       const response = await API.post("/user/verifyOTP", { email, otp });
-        console.log("hey i am here")
       if (response.data.success) {
         setIsVerified(true);
         setMessage("OTP verified successfully!");

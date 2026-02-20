@@ -6,7 +6,7 @@ function Billing() {
   const [items, setItems] = useState([
     { item_name: "", quantity: 1, price: 0, total: 0 },
   ]);
-
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [totalAmount, setTotalAmount] = useState(0);
   const [metrics, setMetrics] = useState({
     dailyProfit: 0,
@@ -29,7 +29,6 @@ function Billing() {
       setMetrics(res.data);
     });
 
-
     API.get("/products/getproduct").then((res) => {
       setProducts(res.data);
     });
@@ -41,18 +40,14 @@ function Billing() {
     updated[index][field] = value;
 
     if (field === "quantity" || field === "price") {
-      updated[index].total =
-        updated[index].quantity * updated[index].price;
+      updated[index].total = updated[index].quantity * updated[index].price;
     }
 
     setItems(updated);
   };
 
   const addItem = () => {
-    setItems([
-      ...items,
-      { item_name: "", quantity: 1, price: 0, total: 0 },
-    ]);
+    setItems([...items, { item_name: "", quantity: 1, price: 0, total: 0 }]);
   };
 
   const removeItem = (index) => {
@@ -68,7 +63,6 @@ function Billing() {
     setItems([{ item_name: "", quantity: 1, price: 0, total: 0 }]);
   };
 
-
   const sendStockEmail = async () => {
     await API.post("/sendemail/email");
     alert("Stock email sent!");
@@ -76,7 +70,6 @@ function Billing() {
 
   return (
     <div className="billing-container">
-
       <h1 className="page-title">Billing Dashboard</h1>
 
       {/* ================= METRICS ================= */}
@@ -161,40 +154,61 @@ function Billing() {
       <div className="mobile-only">
         {items.map((item, index) => (
           <div key={index} className="mobile-card">
-
             <label>Item Name</label>
             <input
               list="productList"
               value={item.item_name}
-              onChange={(e) =>
-                handleChange(index, "item_name", e.target.value)
-              }
+              onChange={(e) => handleChange(index, "item_name", e.target.value)}
             />
 
             <label>Quantity</label>
             <input
               type="number"
               value={item.quantity}
-              onChange={(e) =>
-                handleChange(index, "quantity", +e.target.value)
-              }
+              onChange={(e) => handleChange(index, "quantity", +e.target.value)}
             />
 
             <label>Price</label>
             <input
               type="number"
               value={item.price}
-              onChange={(e) =>
-                handleChange(index, "price", +e.target.value)
-              }
+              onChange={(e) => handleChange(index, "price", +e.target.value)}
             />
 
-            <div className="mobile-total">
-              Total: ${item.total.toFixed(2)}
-            </div>
+            <div className="mobile-total">Total: ${item.total.toFixed(2)}</div>
             <hr />
           </div>
         ))}
+        <div className="mobile-only">
+          <div style={{ marginTop: "20px" }}>
+          <button className="primary-btn" onClick={addItem}>
+            + Add Item
+          </button>
+        </div>
+        </div>
+        <div className="payment-radio">
+  <label className={`radio-btn ${paymentMethod === "cash" ? "active" : ""}`}>
+    <input
+      type="radio"
+      name="payment"
+      value="cash"
+      checked={paymentMethod === "cash"}
+      onChange={() => setPaymentMethod("cash")}
+    />
+    💵 Cash
+  </label>
+
+  <label className={`radio-btn ${paymentMethod === "online" ? "active" : ""}`}>
+    <input
+      type="radio"
+      name="payment"
+      value="online"
+      checked={paymentMethod === "online"}
+      onChange={() => setPaymentMethod("online")}
+    />
+    💳 Online
+  </label>
+</div>
         <button
           className="success-btn"
           onClick={submitBilling}
@@ -227,7 +241,6 @@ function Billing() {
           <option key={i} value={p.name} />
         ))}
       </datalist>
-
     </div>
   );
 }
@@ -236,9 +249,7 @@ function Metric({ title, value }) {
   return (
     <div className="stat-card">
       <h3>{title}</h3>
-      <div className="amount">
-        ${Number(value).toFixed(2)}
-      </div>
+      <div className="amount">${Number(value).toFixed(2)}</div>
     </div>
   );
 }
