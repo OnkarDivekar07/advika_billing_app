@@ -8,6 +8,7 @@ import Inventory from "./pages/Inventory";
 import Financials from "./pages/Financials";
 
 import Layout from "./components/Layout";
+import QrGenerator from "./pages/QrGenerator";
 
 function App() {
   return (
@@ -53,7 +54,14 @@ function App() {
           </Layout>
         }
       />
-
+     <Route
+        path="/qrgenerator"
+        element={
+          <Layout>
+            <QrGenerator />
+          </Layout>
+        }
+      />
       {/* Redirect unknown routes */}
       <Route path="*" element={<Navigate to="/" />} />
 

@@ -11,11 +11,16 @@ function Layout({ children }) {
     { name: "Daily", path: "/daily" },
     { name: "Inventory", path: "/inventory" },
     { name: "Financials", path: "/financials" },
+    { name: "QR Generator", path: "/qrgenerator" },
   ];
+
+  const pageTitle = location.pathname
+    .replace("/", "")
+    .replace("-", " ")
+    .toUpperCase();
 
   return (
     <div className="layout">
-
       {/* Overlay (Mobile Only) */}
       {open && <div className="overlay" onClick={() => setOpen(false)} />}
 
@@ -41,21 +46,16 @@ function Layout({ children }) {
 
       {/* Main */}
       <div className="main">
-
         {/* Topbar */}
         <header className="topbar">
           <button className="menu-btn" onClick={() => setOpen(true)}>
             ☰
           </button>
-          <div className="page-name">
-            {location.pathname.replace("/", "").toUpperCase()}
-          </div>
+          <div className="page-name">{pageTitle}</div>
         </header>
 
         {/* Content */}
-        <div className="content">
-          {children}
-        </div>
+        <div className="content">{children}</div>
       </div>
     </div>
   );

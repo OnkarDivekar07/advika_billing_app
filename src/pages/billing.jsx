@@ -4,7 +4,7 @@ import "./style.css";
 
 function Billing() {
   const [items, setItems] = useState([
-    { item_name: "", quantity: 1, price: 0, total: 0 },
+    { productId: "", item_name: "", quantity: 1, price: 0, total: 0 },
   ]);
 
   const [paymentMethod, setPaymentMethod] = useState("cash");
@@ -42,7 +42,25 @@ function Billing() {
     updated[index][field] = value;
 
     if (field === "quantity" || field === "price") {
-      updated[index].total = updated[index].quantity * updated[index].price;
+      updated[index].total =
+        Number(updated[index].quantity) * Number(updated[index].price);
+    }
+
+    setItems(updated);
+  };
+
+  const handleProductSelect = (index, name) => {
+    const product = products.find((p) => p.name === name);
+    const updated = [...items];
+
+    updated[index].item_name = name;
+
+    if (product) {
+      updated[index].productId = product.id;
+      updated[index].total =
+        updated[index].quantity * product.price;
+    } else {
+      updated[index].productId = "";
     }
 
     setItems(updated);
@@ -51,7 +69,7 @@ function Billing() {
   const addItem = () => {
     setItems([
       ...items,
-      { item_name: "", quantity: 1, price: 0, total: 0 },
+      { productId: "", item_name: "", quantity: 1, price: 0, total: 0 },
     ]);
   };
 
@@ -59,13 +77,40 @@ function Billing() {
     setItems(items.filter((_, i) => i !== index));
   };
 
+  const getValidItems = () => {
+    return items.filter(
+      (item) =>
+        item.productId &&
+        Number(item.quantity) > 0 &&
+        Number(item.price) > 0
+    );
+  };
+
   const submitBilling = async () => {
+    const validItems = getValidItems();
+
+    if (validItems.length === 0) {
+      alert("Please add at least one valid item before submitting.");
+      return;
+    }
+
+    const finalTotal = validItems.reduce(
+      (sum, item) => sum + item.quantity * item.price,
+      0
+    );
+
     await API.post("/transactions/billingTranction", [
-      ...items,
-      { total_amount: totalAmount, payment_method: paymentMethod },
+      ...validItems,
+      {
+        total_amount: finalTotal,
+        payment_method: paymentMethod,
+      },
     ]);
+
     alert("Transaction submitted!");
-    setItems([{ item_name: "", quantity: 1, price: 0, total: 0 }]);
+    setItems([
+      { productId: "", item_name: "", quantity: 1, price: 0, total: 0 },
+    ]);
     setPaymentMethod("cash");
   };
 
@@ -113,7 +158,7 @@ function Billing() {
                     list="productList"
                     value={item.item_name}
                     onChange={(e) =>
-                      handleChange(index, "item_name", e.target.value)
+                      handleProductSelect(index, e.target.value)
                     }
                   />
                 </td>
@@ -164,7 +209,6 @@ function Billing() {
               <button
                 className="mobile-remove"
                 onClick={() => removeItem(index)}
-                aria-label="Remove item"
               >
                 ❌
               </button>
@@ -175,7 +219,7 @@ function Billing() {
               list="productList"
               value={item.item_name}
               onChange={(e) =>
-                handleChange(index, "item_name", e.target.value)
+                handleProductSelect(index, e.target.value)
               }
             />
 
@@ -212,30 +256,19 @@ function Billing() {
           + Add Item
         </button>
 
-        {/* ================= PAYMENT METHOD ================= */}
         <div className="payment-radio">
-          <label
-            className={`radio-btn ${
-              paymentMethod === "cash" ? "active" : ""
-            }`}
-          >
+          <label className={`radio-btn ${paymentMethod === "cash" ? "active" : ""}`}>
             <input
               type="radio"
-              name="payment"
               checked={paymentMethod === "cash"}
               onChange={() => setPaymentMethod("cash")}
             />
             💵 Cash
           </label>
 
-          <label
-            className={`radio-btn ${
-              paymentMethod === "online" ? "active" : ""
-            }`}
-          >
+          <label className={`radio-btn ${paymentMethod === "online" ? "active" : ""}`}>
             <input
               type="radio"
-              name="payment"
               checked={paymentMethod === "online"}
               onChange={() => setPaymentMethod("online")}
             />
@@ -252,7 +285,7 @@ function Billing() {
         </button>
       </div>
 
-      {/* ================= SUMMARY (DESKTOP ONLY) ================= */}
+      {/* ================= SUMMARY ================= */}
       <div className="summary desktop-only">
         <div className="summary-row">
           <span>Subtotal</span>
@@ -262,7 +295,28 @@ function Billing() {
         <div className="grand-total">
           Grand Total: ${totalAmount.toFixed(2)}
         </div>
+       {/* ================= PAYMENT METHOD (DESKTOP) ================= */}
+<div className="payment-radio" style={{ marginTop: "15px" }}>
+  <label className={`radio-btn ${paymentMethod === "cash" ? "active" : ""}`}>
+    <input
+      type="radio"
+      name="payment-desktop"
+      checked={paymentMethod === "cash"}
+      onChange={() => setPaymentMethod("cash")}
+    />
+    💵 Cash
+  </label>
 
+  <label className={`radio-btn ${paymentMethod === "online" ? "active" : ""}`}>
+    <input
+      type="radio"
+      name="payment-desktop"
+      checked={paymentMethod === "online"}
+      onChange={() => setPaymentMethod("online")}
+    />
+    💳 Online
+  </label>
+</div>
         <div className="footer-actions">
           <button className="success-btn" onClick={submitBilling}>
             Submit Transaction
@@ -272,8 +326,8 @@ function Billing() {
 
       {/* ================= PRODUCT LIST ================= */}
       <datalist id="productList">
-        {products.map((p, i) => (
-          <option key={i} value={p.name} />
+        {products.map((p) => (
+          <option key={p.id} value={p.name} />
         ))}
       </datalist>
     </div>

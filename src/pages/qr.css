@@ -1,0 +1,32 @@
+.qr-page {
+  padding: 20px;
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+}
+
+.qr-select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+.qr-wrapper {
+  width: 2.5cm;
+  height: auto;
+  border: 1px solid #000;
+  padding: 4px;
+  margin: 20px auto;
+}
+
+.qr-name {
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.qr-img {
+  width: 2.5cm;
+  height: 2.5cm;
+}
