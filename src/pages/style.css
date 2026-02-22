@@ -388,3 +388,11 @@ td {
     min-width: 850px;
   }
 }
+
+.search-input {
+  width: 300px;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}

@@ -5,6 +5,7 @@ import "./style.css";
 function Inventory() {
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [newProduct, setNewProduct] = useState({
   name: "",
@@ -80,11 +81,19 @@ const removeProduct = async (id) => {
 
   fetchProducts();
 };
-
+ const filteredProducts = products.filter((p) =>
+  p.name.toLowerCase().includes(searchTerm.toLowerCase())
+);
   return (
     <div className="billing-container">
       <h1 className="page-title">Inventory</h1>
-
+    <input
+  type="text"
+  className="search-input"
+  placeholder="Search product by name..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+/>
       {/* ===== TOTAL VALUE ===== */}
       <div className="inventory-total">
         Total Inventory Value: ₹{totalInventoryValue.toFixed(2)}
@@ -163,7 +172,8 @@ const removeProduct = async (id) => {
             </tr>
           </thead>
      <tbody>
-  {products.map((p, index) => {
+  {filteredProducts.map((p) => {
+  const index = products.findIndex(prod => prod.id === p.id);
     const low = p.quantity <= p.lower_threshold;
     const high = p.quantity >= p.upper_threshold;
 
@@ -175,6 +185,7 @@ const removeProduct = async (id) => {
         <td>
           <input
             value={p.name}
+            title={p.name}
             onChange={(e) =>
               handleChange(index, "name", e.target.value)
             }
