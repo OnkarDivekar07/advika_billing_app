@@ -12,6 +12,8 @@ function Layout({ children }) {
     { name: "Inventory", path: "/inventory" },
     { name: "Financials", path: "/financials" },
     { name: "QR Generator", path: "/qrgenerator" },
+    { name: "Product Sheets", path: "/product-sheets" }, 
+    { name: "Product Images", path: "/product-images" }// ✅ added
   ];
 
   const pageTitle = location.pathname

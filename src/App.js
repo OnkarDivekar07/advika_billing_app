@@ -6,9 +6,10 @@ import OtpVerificationPage from "./pages/OtpVerificationPage";
 import DailyTransactions from "./pages/DailyTransactions";
 import Inventory from "./pages/Inventory";
 import Financials from "./pages/Financials";
-
+import ProductSheets from "./pages/ProductSheets";
 import Layout from "./components/Layout";
 import QrGenerator from "./pages/QrGenerator";
+import ProductImages from "./pages/ProductImages";
 
 function App() {
   return (
@@ -62,6 +63,22 @@ function App() {
           </Layout>
         }
       />
+      <Route
+  path="/product-sheets"
+  element={
+    <Layout>
+      <ProductSheets />
+    </Layout>
+  }
+/>
+<Route
+  path="/product-images"
+  element={
+    <Layout>
+      <ProductImages />
+    </Layout>
+  }
+/>
       {/* Redirect unknown routes */}
       <Route path="*" element={<Navigate to="/" />} />
 

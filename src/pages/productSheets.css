@@ -1,0 +1,158 @@
+/* PAGE */
+.sheet-page {
+  padding: 24px;
+  background: #ffffff;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* HEADER */
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sheet-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* ACTIONS */
+.sheet-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.search-input {
+  padding: 10px 14px;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  min-width: 260px;
+  font-size: 14px;
+}
+
+.print-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* GRID — 2 PER ROW */
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+/* PRODUCT CARD */
+.sheet-block {
+  cursor: pointer;
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* HOVER */
+.sheet-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
+}
+
+/* SELECTED */
+.sheet-block.selected {
+  border: 2px solid #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* PRODUCT NAME */
+.block-name {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  color: #111827;
+}
+
+/* IMAGE AREA */
+.block-image {
+  height: 200px;
+  background: #f8fafc;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.block-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.no-image {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* QR AREA */
+.block-qr {
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+/* EXACT QR SIZE */
+.block-qr img {
+  width: 2.5cm;
+  height: 2.5cm;
+}
+
+/* EMPTY STATE */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #6b7280;
+  font-size: 16px;
+  padding: 40px 0;
+}
+
+/* PRINT */
+@media print {
+  .print-btn,
+  .search-input {
+    display: none;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .sheet-grid {
+    gap: 20px;
+  }
+
+  .sheet-block {
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .sheet-block {
+    display: none;
+  }
+
+  .sheet-block.selected {
+    display: grid;
+  }
+}

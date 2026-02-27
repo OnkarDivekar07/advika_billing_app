@@ -1,0 +1,79 @@
+.product-images-page {
+  padding: 20px;
+  background: #fff;
+}
+
+.image-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.image-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 3fr;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px;
+  gap: 12px;
+}
+
+.col {
+  display: flex;
+  align-items: center;
+}
+
+.name-col {
+  font-weight: bold;
+}
+
+.marathi-col input {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+}
+
+.saving {
+  font-size: 12px;
+  margin-left: 8px;
+  color: #888;
+}
+
+.image-col {
+  justify-content: center;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 120px;
+  height: 90px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.upload-btn {
+  border: 1px dashed #999;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
