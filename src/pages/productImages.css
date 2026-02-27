@@ -77,3 +77,41 @@
   cursor: pointer;
   font-size: 14px;
 }
+
+.search-bar {
+  margin: 15px 0;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+}
+
+.search-bar input:focus {
+  border-color: #4f46e5;
+}
+
+
+.error-box {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.retry-btn {
+  margin-top: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  background: #facc15;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

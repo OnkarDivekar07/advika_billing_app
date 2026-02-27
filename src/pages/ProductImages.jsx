@@ -7,6 +7,9 @@ function ProductImages() {
   const [products, setProducts] = useState([]);
   const [uploading, setUploading] = useState(null);
   const [saving, setSaving] = useState(null);
+  const [search, setSearch] = useState("");
+  const [error, setError] = useState(null);
+  const [retryProduct, setRetryProduct] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -21,13 +24,31 @@ function ProductImages() {
   const handleUpload = async (productId, file) => {
     if (!file) return;
 
+    if (!navigator.onLine) {
+      alert("You are offline. Please check internet connection.");
+      return;
+    }
+
     setUploading(productId);
+    setError(null);
+    setRetryProduct(null);
+
     const formData = new FormData();
     formData.append("image", file);
 
-    await API.post(`/products/${productId}/upload-image`, formData);
-    setUploading(null);
-    fetchProducts();
+    try {
+      await API.post(`/products/${productId}/upload-image`, formData, {
+        timeout: 30000, // ⏱️ 30 seconds
+      });
+
+      fetchProducts();
+    } catch (err) {
+      console.error(err);
+      setError("Upload failed due to slow or unstable internet.");
+      setRetryProduct(productId);
+    } finally {
+      setUploading(null);
+    }
   };
 
   /* 🗑️ DELETE IMAGE */
@@ -48,12 +69,29 @@ function ProductImages() {
     fetchProducts();
   };
 
+  const filteredProducts = products.filter(
+    (p) =>
+      (p.name || "").toLowerCase().includes(search.toLowerCase()) ||
+      (p.marathiName || "").toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="product-images-page">
       <h1>Product Images</h1>
 
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search product (English / मराठी)"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {error && <div className="error-box">{error}</div>}
+      </div>
+
       <div className="image-table">
-        {products.map((p) => (
+        {filteredProducts.map((p) => (
           <div key={p.id} className="image-row">
             {/* ENGLISH NAME */}
             <div className="col name-col">{p.name}</div>
@@ -86,19 +124,35 @@ function ProductImages() {
                   </button>
                 </div>
               ) : (
-                <label className="upload-btn">
-                  {uploading === p.id
-                    ? "Uploading..."
-                    : "Upload Image"}
-                  <input
-                    type="file"
-                    hidden
-                    accept="image/*"
-                    onChange={(e) =>
-                      handleUpload(p.id, e.target.files[0])
-                    }
-                  />
-                </label>
+                <>
+                  <label className="upload-btn">
+                    {uploading === p.id
+                      ? "Uploading..."
+                      : "Upload Image"}
+                    <input
+                      id={`file-${p.id}`}
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleUpload(p.id, e.target.files[0])
+                      }
+                    />
+                  </label>
+
+                  {retryProduct === p.id && (
+                    <button
+                      className="retry-btn"
+                      onClick={() =>
+                        document
+                          .getElementById(`file-${p.id}`)
+                          .click()
+                      }
+                    >
+                      Retry Upload
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </div>
