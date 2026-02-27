@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import API from "../api";
 import QRCode from "qrcode";
 import "./productSheets.css";
@@ -9,17 +9,7 @@ function ProductSheets() {
   const [search, setSearch] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    const res = await API.get("/products/getproduct");
-    setProducts(res.data);
-    generateQrs(res.data);
-  };
-
-  const generateQrs = async (list) => {
+  const generateQrs = useCallback(async (list) => {
     const map = {};
     for (const p of list) {
       map[p.id] = await QRCode.toDataURL(p.id, {
@@ -28,7 +18,17 @@ function ProductSheets() {
       });
     }
     setQrMap(map);
-  };
+  }, []);
+
+  const fetchProducts = useCallback(async () => {
+    const res = await API.get("/products/getproduct");
+    setProducts(res.data);
+    generateQrs(res.data);
+  }, [generateQrs]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   /* 🔍 SEARCH FILTER */
   const filteredProducts = products.filter((p) =>
@@ -48,7 +48,6 @@ function ProductSheets() {
   const handlePrint = () => {
     window.print();
   };
-
 
   return (
     <div className="sheet-page">
@@ -77,7 +76,7 @@ function ProductSheets() {
           <div className="no-results">No products found</div>
         )}
 
-       {filteredProducts.map((p) => {
+        {filteredProducts.map((p) => {
           const isSelected = selectedIds.includes(p.id);
 
           return (
@@ -87,9 +86,9 @@ function ProductSheets() {
               onClick={() => toggleSelect(p.id)}
             >
               {/* NAME */}
-<div className="block-name">
-  {p.marathiName?.trim() || p.name}
-</div>
+              <div className="block-name">
+                {p.marathiName?.trim() || p.name}
+              </div>
 
               {/* IMAGE */}
               <div className="block-image">
