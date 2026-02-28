@@ -156,3 +156,71 @@
     display: grid;
   }
 }
+/* ================= PRINT ONLY HEADER ================= */
+
+.print-only-header {
+  display: none;
+}
+
+/* PRINT MODE */
+@media print {
+  /* hide unwanted UI */
+  .sheet-header,
+  .sheet-actions,
+  .search-input,
+  .print-btn {
+    display: none !important;
+  }
+
+  /* show store header */
+  .print-only-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #fecaca;
+  }
+
+  .print-store-name {
+  font-family: "Poppins", "Noto Serif Devanagari", "Mangal", serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #b91c1c; /* deep red */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Optional classy subtitle */
+.print-store-tagline {
+  font-family: "Poppins", "Mangal", serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #7f1d1d;
+  text-align: center;
+  margin-top: 2px;
+}
+}
+
+@media print {
+  /* Hide app header / navbar */
+  header,
+  .app-header,
+  .navbar,
+  .top-bar {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Remove extra top spacing */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .sheet-page {
+    padding-top: 0;
+  }
+}

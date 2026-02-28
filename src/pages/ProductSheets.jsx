@@ -51,6 +51,14 @@ function ProductSheets() {
 
   return (
     <div className="sheet-page">
+      <div className="print-only-header">
+  <div className="print-store-name">
+    अद्विका ऑटो अ‍ॅक्सेसरीज
+  </div>
+  <div className="print-store-tagline">
+    किंमत योग्य, काम भारी...
+  </div>
+</div>
       {/* HEADER */}
       <div className="sheet-header">
         <h2>Product QR Sheets</h2>
