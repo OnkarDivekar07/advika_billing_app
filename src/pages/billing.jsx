@@ -118,30 +118,7 @@ function Billing() {
     await API.post("/sendemail/email");
     alert("Stock email sent!");
   };
-  const runMarathiBackfill = async () => {
-  const confirmRun = window.confirm(
-    "⚠️ Run Marathi Name Backfill?\nThis should be done only once."
-  );
-
-  if (!confirmRun) return;
-
-  try {
-    const res = await API.post("/api/internal/backfill-marathi", {
-      secret: "BACKFILL_OK"
-    });
-
-    alert(
-      `✅ Backfill Complete\n\nUpdated: ${res.data.updated}\nSkipped: ${res.data.skipped}\nTotal Checked: ${res.data.total}`
-    );
-  } catch (err) {
-    console.error(err);
-    alert(
-      "❌ Backfill failed\n" +
-        (err.response?.data?.error || err.message)
-    );
-  }
-};
-
+  
   return (
     <div className="billing-container">
       <h1 className="page-title">Billing Dashboard</h1>
@@ -160,15 +137,7 @@ function Billing() {
           Send Stock Email
         </button>
         {/* 🔥 TEMP INTERNAL TOOL – REMOVE AFTER USE */}
-  <button
-    className="danger-btn"
-    onClick={runMarathiBackfill}
-    style={{ marginLeft: "10px" }}
-  >
-    Backfill Marathi Names
-  </button>
       </div>
-
       {/* ================= DESKTOP TABLE ================= */}
       <div className="table-wrapper desktop-only">
         <table>
