@@ -3,10 +3,17 @@ import API from "../api";
 import "./productImages.css";
 import { Trash2 } from "lucide-react";
 
+const UNIT_OPTIONS = [
+  { value: "pcs", label: "नग (PCS)" },
+  { value: "jodi", label: "जोडी (JODI)" },
+  { value: "dozen", label: "डझन (DOZEN)" },
+];
+
 function ProductImages() {
   const [products, setProducts] = useState([]);
   const [uploading, setUploading] = useState(null);
   const [saving, setSaving] = useState(null);
+  const [unitSaving, setUnitSaving] = useState(null);
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const [retryProduct, setRetryProduct] = useState(null);
@@ -38,9 +45,8 @@ function ProductImages() {
 
     try {
       await API.post(`/products/${productId}/upload-image`, formData, {
-        timeout: 30000, // ⏱️ 30 seconds
+        timeout: 30000,
       });
-
       fetchProducts();
     } catch (err) {
       console.error(err);
@@ -69,6 +75,28 @@ function ProductImages() {
     fetchProducts();
   };
 
+  /* 📦 SAVE DEFAULT UNIT */
+  const handleUnitChange = async (productId, defaultUnit) => {
+    try {
+      setUnitSaving(productId);
+
+      await API.put(`/products/${productId}/unit`, {
+        defaultUnit,
+      });
+
+      // optimistic UI update
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === productId ? { ...p, defaultUnit } : p
+        )
+      );
+    } catch (err) {
+      alert("Failed to update unit");
+    } finally {
+      setUnitSaving(null);
+    }
+  };
+
   const filteredProducts = products.filter(
     (p) =>
       (p.name || "").toLowerCase().includes(search.toLowerCase()) ||
@@ -77,7 +105,7 @@ function ProductImages() {
 
   return (
     <div className="product-images-page">
-      <h1>Product Images</h1>
+      <h1>Product Images & Units</h1>
 
       <div className="search-bar">
         <input
@@ -95,6 +123,27 @@ function ProductImages() {
           <div key={p.id} className="image-row">
             {/* ENGLISH NAME */}
             <div className="col name-col">{p.name}</div>
+
+            {/* DEFAULT UNIT */}
+            <div className="col unit-col">
+              <select
+                value={p.defaultUnit || "pcs"}
+                onChange={(e) =>
+                  handleUnitChange(p.id, e.target.value)
+                }
+                disabled={unitSaving === p.id}
+              >
+                {UNIT_OPTIONS.map((u) => (
+                  <option key={u.value} value={u.value}>
+                    {u.label}
+                  </option>
+                ))}
+              </select>
+
+              {unitSaving === p.id && (
+                <span className="saving">Saving...</span>
+              )}
+            </div>
 
             {/* MARATHI NAME */}
             <div className="col marathi-col">
