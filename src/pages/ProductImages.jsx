@@ -45,7 +45,7 @@ function ProductImages() {
 
     try {
       await API.post(`/products/${productId}/upload-image`, formData, {
-        timeout: 30000,
+        timeout: 60000,
       });
       fetchProducts();
     } catch (err) {
