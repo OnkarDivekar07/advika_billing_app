@@ -36,12 +36,13 @@ function ProductSheets() {
 );
 
 const visibleProducts = [
-  ...products.filter((p) => selectedIds.includes(p.id)),
+  ...selectedIds
+    .map((id) => products.find((p) => p.id === id))
+    .filter(Boolean),
   ...filteredProducts.filter(
     (p) => !selectedIds.includes(p.id)
   ),
 ];
-
   /* ✅ TOGGLE SELECTION */
   const toggleSelect = (id) => {
     setSelectedIds((prev) =>
