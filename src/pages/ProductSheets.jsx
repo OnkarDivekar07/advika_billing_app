@@ -32,8 +32,15 @@ function ProductSheets() {
 
   /* 🔍 SEARCH FILTER */
   const filteredProducts = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  p.name.toLowerCase().includes(search.toLowerCase())
+);
+
+const visibleProducts = [
+  ...products.filter((p) => selectedIds.includes(p.id)),
+  ...filteredProducts.filter(
+    (p) => !selectedIds.includes(p.id)
+  ),
+];
 
   /* ✅ TOGGLE SELECTION */
   const toggleSelect = (id) => {
@@ -80,11 +87,11 @@ function ProductSheets() {
 
       {/* GRID */}
       <div className="sheet-grid">
-        {filteredProducts.length === 0 && (
-          <div className="no-results">No products found</div>
-        )}
+        {visibleProducts.length === 0 && (
+  <div className="no-results">No products found</div>
+)}
 
-        {filteredProducts.map((p) => {
+        {visibleProducts.map((p) => {
           const isSelected = selectedIds.includes(p.id);
 
           return (
