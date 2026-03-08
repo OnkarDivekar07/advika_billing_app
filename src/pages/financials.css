@@ -1,0 +1,52 @@
+.finance-page {
+  padding: 40px;
+  background: #f5f7fb;
+  min-height: 100vh;
+  font-family: system-ui;
+}
+
+.finance-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.finance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.finance-card {
+  padding: 25px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease;
+}
+
+.finance-card:hover {
+  transform: translateY(-3px);
+}
+
+.finance-card h2 {
+  margin-top: 10px;
+  font-size: 32px;
+}
+
+.label {
+  color: #666;
+  font-size: 14px;
+}
+
+.cash {
+  border-left: 6px solid #22c55e;
+}
+
+.online {
+  border-left: 6px solid #3b82f6;
+}
+
+.loading {
+  padding: 40px;
+}

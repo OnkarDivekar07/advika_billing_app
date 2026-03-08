@@ -13,9 +13,11 @@ function Layout({ children }) {
     { name: "Financials", path: "/financials" },
     { name: "QR Generator", path: "/qrgenerator" },
     { name: "Product Sheets", path: "/product-sheets" }, 
-    { name: "Product Images", path: "/product-images" }// ✅ added
-  ];
-
+    { name: "Product Images", path: "/product-images" },// ✅ added
+    { name: "Orders", path: "/admin-orders" },
+    { name: "Suppliers", path: "/suppliers" },
+    { name: "financials", path: "/financials" }
+  ]; 
   const pageTitle = location.pathname
     .replace("/", "")
     .replace("-", " ")
