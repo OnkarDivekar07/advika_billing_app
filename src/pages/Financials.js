@@ -12,7 +12,7 @@ export default function Financials() {
 
   const fetchFinance = async () => {
     try {
-      const res = await API.get("/finance-summary");
+      const res = await API.get("/api/finance-summary");
       setData(res.data);
     } catch (err) {
       alert("Finance data load failed");
